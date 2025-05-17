@@ -49,18 +49,42 @@ def get_spotify_playlist_tracks():
         url = data.get("next")
     return results
 
-# --- Apple Music ---
-def search_apple_music(title, artist):
+
+import requests
+import difflib
+
+APPLE_MUSIC_API = "https://itunes.apple.com/search"
+
+# 🔍 חיפוש שיר באפל מיוזיק לפי ISRC או לפי שם ואמן
+def search_apple_music(title, artist, isrc=None):
+    if isrc:
+        response = requests.get(APPLE_MUSIC_API, params={"term": isrc, "entity": "song", "limit": 1})
+        if response.ok:
+            results = response.json().get("results", [])
+            if results:
+                return results[0]
+
     query = f"{title} {artist}"
-    resp = requests.get("https://itunes.apple.com/search", params={"term": query, "entity": "song", "limit": 5})
-    if resp.ok:
-        results = resp.json().get("results", [])
-        return results[0] if results else None
+    response = requests.get(APPLE_MUSIC_API, params={"term": query, "entity": "song", "limit": 5})
+    if response.ok:
+        results = response.json().get("results", [])
+        if results:
+            return results[0]
+
     return None
 
+# 🎭 בדיקת התאמה בין שמות אמנים בצורה חכמה יותר
 def artist_similarity(original, found):
-    return difflib.SequenceMatcher(None, original.lower(), found.lower()).ratio() >= 0.7
+    original = original.lower().strip()
+    found = found.lower().strip()
 
+    # אם האמן שחיפשנו נמצא כחלק מהתוצאה — קבל
+    if original in found:
+        return True
+
+    # אחרת, בדיקת דמיון באחוזים
+    similarity = difflib.SequenceMatcher(None, original, found).ratio()
+    return similarity >= 0.65
 # --- Download if not found ---
 def sanitize_filename(text):
     return re.sub(r'[\\/*?:"<>|]', "", text)
