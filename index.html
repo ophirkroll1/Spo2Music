@@ -3,78 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎵 תוצאות סנכרון</title>
+  <title>🎵 מסך הבית - סנכרון שירים</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
-      background: #f0f0f0;
+      background: #f9f9f9;
       padding: 2rem;
-      color: #222;
+      text-align: center;
     }
     h1 {
-      text-align: center;
       margin-bottom: 1.5rem;
     }
-    .song {
-      background: #fff;
-      padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .title {
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-    .artist {
-      margin: 0.5rem 0;
-      color: #555;
-    }
-    .button {
+    .btn {
       display: inline-block;
-      padding: 0.5rem 1rem;
+      margin: 1rem;
+      padding: 1rem 2rem;
       background: #007aff;
       color: white;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
       text-decoration: none;
+      transition: background 0.2s;
     }
-    .button:hover {
+    .btn:hover {
       background: #005bbb;
     }
   </style>
 </head>
 <body>
-  <h1>🎶 תוצאות הסנכרון שלך</h1>
-  <div id="results">טוען שירים...</div>
+  <h1>🎶 ברוך הבא לסנכרון Spotify → Apple Music</h1>
+
+  <a class="btn" href="#" onclick="runSync()">🔁 הרץ סנכרון מחדש</a>
+  <a class="btn" href="web.html">🎧 הצג שירים שנמצאו</a>
+
+  <p id="status" style="margin-top:2rem; color: green;"></p>
 
   <script>
-    fetch('https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/apple_matches.json')
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('results');
-        if (!data.length) {
-          container.innerHTML = 'לא נמצאו שירים.';
-          return;
+    function runSync() {
+      document.getElementById("status").textContent = "🔄 מפעיל סנכרון...";
+      fetch("https://api.github.com/repos/ophirkroll1/Spo2Music/actions/workflows/sync.yml/dispatches", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer github_pat_...כאן_שים_טוקן_סודי...",
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ref: "main" })
+      })
+      .then(res => {
+        if (res.ok) {
+          document.getElementById("status").textContent = "✅ הסנכרון התחיל! חכה דקה ואז עבור לעמוד התוצאות.";
+        } else {
+          return res.json().then(data => {
+            throw new Error(data.message || "שגיאה בהפעלה");
+          });
         }
-
-        container.innerHTML = '';
-        data.forEach(song => {
-          const div = document.createElement('div');
-          div.className = 'song';
-          div.innerHTML = `
-            <div class="title">${song.title}</div>
-            <div class="artist">מאת: ${song.artist}</div>
-            <a class="button" href="${song.url}" target="_blank">🎧 שמע באפל מיוזיק</a>
-          `;
-          container.appendChild(div);
-        });
       })
       .catch(err => {
-        document.getElementById('results').innerText = 'שגיאה בטעינת הנתונים 😢';
-        console.error(err);
+        document.getElementById("status").style.color = "red";
+        document.getElementById("status").textContent = "❌ שגיאה: " + err.message;
       });
+    }
   </script>
 </body>
 </html>
