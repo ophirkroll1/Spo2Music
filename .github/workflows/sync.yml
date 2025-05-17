@@ -26,7 +26,7 @@ jobs:
           pip install -r requirements.txt
 
 - name: Run debug sync script
-  run: python3 main_debug.py 5fgMIR1fLgyXRlrCtoK6kO
+  run: python3 main_debug.py
 
       - name: Commit output files
         run: |
