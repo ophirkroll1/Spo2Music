@@ -31,7 +31,7 @@ jobs:
         python3 main.py ${{ github.event.inputs.playlist_id }}
 
     - name: 📤 Upload results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3  # ✅ THIS LINE MUST HAVE 'uses:'
       with:
         name: scan-results
         path: |
