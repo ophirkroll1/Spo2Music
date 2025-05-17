@@ -1,7 +1,7 @@
 name: 🔁 Sync Spotify to Apple Music
 
 on:
-  workflow_dispatch:  # Manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -25,7 +25,7 @@ jobs:
         run: python3 main.py 5fgMIR1fLgyXRlrCtoK6kO
 
       - name: 📤 Upload results
-        uses: actions/upload-artifact@v2  # using v2 for stability
+        uses: actions/upload-artifact@v3
         with:
           name: scan-results
           path: |
