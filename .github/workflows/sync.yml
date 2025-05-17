@@ -24,10 +24,12 @@ jobs:
       - name: ▶️ Run main script
         run: python3 main.py 5fgMIR1fLgyXRlrCtoK6kO
 
-      - name: 📤 Upload results
-        uses: actions/upload-artifact@v2
-        with:
-          name: scan-results
-          path: |
-            apple_matches.json
-            missing_songs.json
+      - name: 📝 Commit results back to repo
+        run: |
+          git config --global user.name "SpotifySyncBot"
+          git config --global user.email "bot@github.com"
+          git add apple_matches.json missing_songs.json
+          git commit -m "🔁 Updated scan results" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
