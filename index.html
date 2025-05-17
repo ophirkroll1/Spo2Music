@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify to Apple Music Sync</title>
+  <style>
+    body { font-family: sans-serif; direction: rtl; padding: 2em; background: #f4f4f4; }
+    h1 { text-align: center; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 18px;
+      text-align: center;
+      background-color: #007aff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    .btn:hover { background-color: #0051c6; }
+  </style>
+</head>
+<body>
+  <h1>סנכרון שירים</h1>
+  <a href="https://api.github.com/repos/ophirkroll1/Spo2Music/actions/workflows/sync.yml/dispatches"
+     class="btn" onclick="syncPlaylist(); return false;">
+    🔁 סנכרן את הפלייליסט
+  </a>
+  <a href="https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/apple_matches.json" class="btn">
+    📄 הצג תוצאות
+  </a>
+
+  <script>
+    async function syncPlaylist() {
+      const res = await fetch("https://api.github.com/repos/ophirkroll1/Spo2Music/actions/workflows/sync.yml/dispatches", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer YOUR_GITHUB_PAT",
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ref: "main" })
+      });
+
+      if (res.ok) {
+        alert("הסנכרון התחיל! המתן מספר רגעים...");
+      } else {
+        alert("שגיאה בהרצת הסנכרון. בדוק את ההרשאות או את ה־PAT שלך.");
+      }
+    }
+  </script>
+</body>
+</html>
