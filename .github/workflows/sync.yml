@@ -25,8 +25,8 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
-- name: Run debug sync script
-  run: python3 main_debug.py
+      - name: Run debug sync script
+        run: python3 main_debug.py
 
       - name: Commit output files
         run: |
