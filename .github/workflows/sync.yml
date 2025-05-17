@@ -1,39 +1,33 @@
-name: Spotify Sync
+name: 🔁 Sync Spotify to Apple Music
 
 on:
-  workflow_dispatch:
-    inputs:
-      playlist_id:
-        description: 'Spotify Playlist ID'
-        required: true
-        default: '5fgMIR1fLgyXRlrCtoK6kO'
+  workflow_dispatch:  # Manual trigger from GitHub UI
 
 jobs:
-  build:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v3
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
-    - name: 📦 Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: 🚀 Run main script
-      run: |
-        python3 main.py ${{ github.event.inputs.playlist_id }}
+      - name: ▶️ Run main script
+        run: python3 main.py 5fgMIR1fLgyXRlrCtoK6kO
 
-    - name: 📤 Upload results
-      uses: actions/upload-artifact@v3  # ✅ THIS LINE MUST HAVE 'uses:'
-      with:
-        name: scan-results
-        path: |
-          apple_matches.json
-          missing_songs.json
+      - name: 📤 Upload results
+        uses: actions/upload-artifact@v2  # using v2 for stability
+        with:
+          name: scan-results
+          path: |
+            apple_matches.json
+            missing_songs.json
