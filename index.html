@@ -2,70 +2,113 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎵 מסך הבית - סנכרון שירים</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎧 סנכרון Spotify ➝ Apple Music</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      background: #f9f9f9;
       padding: 2rem;
-      text-align: center;
+      background-color: #f9f9f9;
     }
-    h1 {
-      margin-bottom: 1.5rem;
+    .btn-sync {
+      margin-bottom: 1rem;
     }
-    .btn {
-      display: inline-block;
-      margin: 1rem;
-      padding: 1rem 2rem;
-      background: #007aff;
-      color: white;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 10px;
-      text-decoration: none;
-      transition: background 0.2s;
+    .song-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      background-color: #fff;
     }
-    .btn:hover {
-      background: #005bbb;
+    .song-link:hover {
+      background-color: #f1f1f1;
+    }
+    .song-info {
+      max-width: 85%;
     }
   </style>
 </head>
 <body>
-  <h1>🎶 ברוך הבא לסנכרון Spotify → Apple Music</h1>
 
-  <a class="btn" href="#" onclick="runSync()">🔁 הרץ סנכרון מחדש</a>
-  <a class="btn" href="web.html">🎧 הצג שירים שנמצאו</a>
+  <div class="container">
+    <h2 class="mb-4">🎧 שירים שנמצאו באפל מיוזיק</h2>
 
-  <p id="status" style="margin-top:2rem; color: green;"></p>
+    <button class="btn btn-success btn-sync" onclick="runSync()">🔁 הרץ סנכרון</button>
+    <div id="status" class="mb-3 text-secondary">⌛ ממתין לטעינת נתונים...</div>
+
+    <div id="songs"></div>
+  </div>
 
   <script>
-    function runSync() {
-      document.getElementById("status").textContent = "🔄 מפעיל סנכרון...";
-      fetch("https://api.github.com/repos/ophirkroll1/Spo2Music/actions/workflows/sync.yml/dispatches", {
+    const token = "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"; // ← שים כאן את ה־GitHub Token שלך
+    const repo = "ophirkroll1/Spo2Music";
+    const branch = "main";
+    const workflow = "sync.yml";
+
+    async function runSync() {
+      const status = document.getElementById("status");
+      status.innerText = "🔁 מריץ סנכרון...";
+
+      const res = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`, {
         method: "POST",
         headers: {
-          "Authorization": "Bearer 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",
+          "Authorization": `Bearer ${token}`,
           "Accept": "application/vnd.github+json",
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ ref: "main" })
-      })
-      .then(res => {
-        if (res.ok) {
-          document.getElementById("status").textContent = "✅ הסנכרון התחיל! חכה דקה ואז עבור לעמוד התוצאות.";
-        } else {
-          return res.json().then(data => {
-            throw new Error(data.message || "שגיאה בהפעלה");
-          });
-        }
-      })
-      .catch(err => {
-        document.getElementById("status").style.color = "red";
-        document.getElementById("status").textContent = "❌ שגיאה: " + err.message;
+        body: JSON.stringify({ ref: branch })
       });
+
+      if (res.ok) {
+        status.innerText = "✅ הסנכרון התחיל! המתן דקה ונטען את התוצאות...";
+        setTimeout(loadSongs, 60000); // טוען תוצאות אחרי דקה
+      } else {
+        const data = await res.json();
+        status.innerText = `❌ שגיאה: ${data.message || res.statusText}`;
+      }
     }
+
+    async function loadSongs() {
+      const status = document.getElementById("status");
+      const songsContainer = document.getElementById("songs");
+
+      status.innerText = "📥 טוען תוצאות מהריפו...";
+
+      try {
+        const res = await fetch("https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/apple_matches.json");
+        const data = await res.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+          status.innerText = "😕 לא נמצאו שירים תואמים.";
+          return;
+        }
+
+        status.innerText = `✅ נמצאו ${data.length} שירים`;
+        songsContainer.innerHTML = "";
+
+        data.forEach(song => {
+          const div = document.createElement("div");
+          div.className = "song-link";
+          div.innerHTML = `
+            <div class="song-info">
+              <strong>${song.title}</strong><br/>
+              <small>${song.artist}</small>
+            </div>
+            <a href="${song.url}" target="_blank" class="btn btn-outline-primary">🎵 פתח באפל מיוזיק</a>
+          `;
+          songsContainer.appendChild(div);
+        });
+
+      } catch (e) {
+        status.innerText = "❌ שגיאה בעת טעינת הקובץ.";
+        console.error(e);
+      }
+    }
+
+    loadSongs();
   </script>
 </body>
 </html>
