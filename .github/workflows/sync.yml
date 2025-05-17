@@ -30,3 +30,11 @@ jobs:
 
       - name: Show generated files
         run: ls -lh *.json || echo "No output files generated"
+
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sync-results
+          path: |
+            apple_matches.json
+            missing_songs.json
