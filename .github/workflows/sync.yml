@@ -27,15 +27,14 @@ jobs:
 
       - name: ▶️ Run main script
         run: python3 main.py 5fgMIR1fLgyXRlrCtoK6kO
-
       - name: 📤 Upload missing_songs.json
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: missing_songs
           path: missing_songs.json
 
       - name: 📤 Upload apple_matches.json
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: apple_matches
           path: apple_matches.json
