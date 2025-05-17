@@ -1,0 +1,39 @@
+name: Spotify Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      playlist_id:
+        description: 'Spotify Playlist ID'
+        required: true
+        default: '5fgMIR1fLgyXRlrCtoK6kO'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 📦 Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: 🚀 Run main script
+      run: |
+        python3 main.py ${{ github.event.inputs.playlist_id }}
+
+    - name: 📤 Upload results
+      uses: actions/upload-artifact@v3
+      with:
+        name: scan-results
+        path: |
+          apple_matches.json
+          missing_songs.json
