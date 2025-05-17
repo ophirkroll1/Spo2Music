@@ -28,10 +28,10 @@ jobs:
       - name: Run sync script
         run: python3 main.py 5fgMIR1fLgyXRlrCtoK6kO
 
-      - name: Upload results
-        uses: actions/upload-artifact@v3
+      - name: Upload JSON files
+        uses: actions/upload-artifact@v2  # שימוש בגרסה תקינה ובטוחה
         with:
-          name: spotify-sync-results
+          name: sync-json-output
           path: |
             apple_matches.json
             missing_songs.json
