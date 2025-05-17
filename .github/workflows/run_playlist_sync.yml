@@ -1,0 +1,43 @@
+name: Spotify → Apple Music Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      playlist_id:
+        description: "Spotify Playlist ID"
+        required: true
+        default: "5fgMIR1fLgyXRlrCtoK6kO"
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install requests yt-dlp ytmusicapi mutagen
+
+      - name: 🔐 Set environment variables
+        run: echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> $GITHUB_ENV && echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> $GITHUB_ENV
+
+      - name: 🚀 Run sync script
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        run: |
+          python3 main.py ${{ github.event.inputs.playlist_id }}
+
+      - name: 📤 Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync-results
+          path: |
+            apple_matches.json
+            missing_songs.json
