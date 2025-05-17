@@ -1,4 +1,4 @@
-name: 🔁 Sync Spotify to Apple Music
+name: Sync Spotify to Apple Music
 
 on:
   workflow_dispatch:
@@ -7,6 +7,10 @@ jobs:
   sync:
     runs-on: ubuntu-latest
 
+    env:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
     steps:
       - name: ⬇️ Checkout repository
         uses: actions/checkout@v3
@@ -14,22 +18,24 @@ jobs:
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
       - name: 📦 Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: ▶️ Run main script
         run: python3 main.py 5fgMIR1fLgyXRlrCtoK6kO
 
-      - name: 📝 Commit results back to repo
-        run: |
-          git config --global user.name "SpotifySyncBot"
-          git config --global user.email "bot@github.com"
-          git add apple_matches.json missing_songs.json
-          git commit -m "🔁 Updated scan results" || echo "No changes to commit"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 📤 Upload missing_songs.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: missing_songs
+          path: missing_songs.json
+
+      - name: 📤 Upload apple_matches.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: apple_matches
+          path: apple_matches.json
