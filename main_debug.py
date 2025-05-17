@@ -1,8 +1,7 @@
-# main_debug.py
+import json
 from spotify_client import get_spotify_playlist_tracks
 from apple_music import search_apple_music, artist_similarity
 from utils import sanitize_filename
-import json
 
 PLAYLIST_ID = "5fgMIR1fLgyXRlrCtoK6kO"
 
@@ -17,16 +16,18 @@ for idx, track in enumerate(tracks, 1):
     artist = track.get("artist")
 
     if not title or not artist:
-        print(f"⚠️ Skipping track with missing info: {track}")
+        print(f"⚠️ Song with missing info: {track}")
         continue
 
     print(f"{idx}. 🎵 {title} — {artist}")
+    
+    # חיפוש באפל מיוזיק
     print(f"🔍 Searching Apple Music for: {title} {artist}")
-
     result = search_apple_music(title, artist)
+
     if result:
-        found_artist = result.get("artist", "")
-        url = result.get("url", "")
+        found_artist = result.get("artist") or result.get("artistName", "").strip()
+        url = result.get("trackViewUrl") or result.get("url", "")
 
         if artist_similarity(artist, found_artist):
             print(f"  ✅ Found on Apple Music: {title} — {found_artist}")
@@ -38,11 +39,10 @@ for idx, track in enumerate(tracks, 1):
             continue
         else:
             print(f"  ⚠️ Artist mismatch: {artist} vs {found_artist}")
-
     else:
         print(f"  ❌ Not found on Apple Music: {title}")
 
-    # Add to missing songs
+    # אם לא נמצא או לא תאם
     filename = sanitize_filename(f"{artist} - {title}.mp3")
     missing_songs.append({
         "title": title,
@@ -52,11 +52,11 @@ for idx, track in enumerate(tracks, 1):
         "filename": filename
     })
 
-# Save results
+# כתיבה לקבצי JSON
 with open("apple_matches.json", "w", encoding="utf-8") as f:
     json.dump(apple_matches, f, ensure_ascii=False, indent=2)
 
 with open("missing_songs.json", "w", encoding="utf-8") as f:
     json.dump(missing_songs, f, ensure_ascii=False, indent=2)
 
-print("\n✅ Done. JSON files written.")
+print("✅ Done. JSON files written.")
