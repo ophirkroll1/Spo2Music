@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import subprocess
 from spotify_client import get_spotify_playlist_tracks
 from apple_music import search_apple_music, artist_similarity
@@ -56,8 +57,6 @@ for idx, track in enumerate(tracks, 1):
 
     print(f"  ⬇️ Downloading from Spotify: {spotify_url}")
     try:
-        import sys  # הוסף בתחילת הקובץ
-        
         subprocess.run([
             sys.executable, "-m", "spotify_dl",
             "--output", filepath,
@@ -65,8 +64,9 @@ for idx, track in enumerate(tracks, 1):
         ], check=True)
         print(f"  ✅ Downloaded to {filepath}")
         download_url = f"https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/{DOWNLOAD_DIR}/{filename.replace(' ', '%20')}"
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
         print(f"  ❌ Download failed for: {spotify_url}")
+        print(f"  ❗ Error: {e}")
         download_url = spotify_url  # fallback
 
     full_playlist.append({
