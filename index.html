@@ -45,7 +45,7 @@
   </style>
 </head>
 <body>
-  <h1>🎵 רשימת השמעה</h1>
+  <h1>🎵 רשימת השמעה מלאה</h1>
   <div id="playlist"></div>
 
   <script>
@@ -61,11 +61,15 @@
             <div class="track-info">
               <h3>${track.title}</h3>
               <p>${track.artist}</p>
-              <a href="${track.url}" target="_blank">🎧 ${track.source === 'apple' ? 'Apple Music' : 'הורדה'}</a>
+              <a href="${track.url}" target="_blank">🎧 ${track.source === 'apple' ? 'האזן באפל מיוזיק' : 'הורדה'}</a>
             </div>
           `;
           container.appendChild(div);
         });
+      })
+      .catch(err => {
+        document.getElementById('playlist').innerHTML = '<p style="color:red">שגיאה בטעינת רשימת ההשמעה.</p>';
+        console.error(err);
       });
   </script>
 </body>
