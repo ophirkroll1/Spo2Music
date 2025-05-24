@@ -1,13 +1,12 @@
 import json
 import os
 import subprocess
-import sys
 from spotify_client import get_spotify_playlist_tracks
 from apple_music import search_apple_music, artist_similarity
 from utils import sanitize_filename
 
 PLAYLIST_ID = "5fgMIR1fLgyXRlrCtoK6kO"
-DOWNLOAD_DIR = "downloads"
+DOWNLOAD_DIR = "docs/downloads"  # חשוב: בתוך docs כדי שהקבצים יהיו זמינים בגיטהאב פייג'ס
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 print(f"🎵 Loading playlist: {PLAYLIST_ID}")
@@ -63,7 +62,9 @@ for idx, track in enumerate(tracks, 1):
             "--output", filepath
         ], check=True)
         print(f"  ✅ Downloaded to {filepath}")
-        download_url = f"https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/{DOWNLOAD_DIR}/{filename.replace(' ', '%20')}"
+
+        # הכנה לקישור ציבורי מתוך GitHub Pages
+        download_url = f"https://ophirkroll1.github.io/Spo2Music/downloads/{filename.replace(' ', '%20')}"
     except subprocess.CalledProcessError as e:
         print(f"  ❌ Download failed for: {spotify_url}")
         print(f"  ❗ Error: {e}")
@@ -78,7 +79,7 @@ for idx, track in enumerate(tracks, 1):
     })
 
 # כתיבה לקובץ JSON אחיד
-with open("full_playlist.json", "w", encoding="utf-8") as f:
+with open("docs/full_playlist.json", "w", encoding="utf-8") as f:
     json.dump(full_playlist, f, ensure_ascii=False, indent=2)
 
-print("✅ Done. full_playlist.json written.")
+print("✅ Done. docs/full_playlist.json written.")
