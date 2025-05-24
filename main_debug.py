@@ -1,9 +1,13 @@
 import json
+import os
+import subprocess
 from spotify_client import get_spotify_playlist_tracks
 from apple_music import search_apple_music, artist_similarity
 from utils import sanitize_filename
 
 PLAYLIST_ID = "5fgMIR1fLgyXRlrCtoK6kO"
+DOWNLOAD_DIR = "downloads"
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 print(f"🎵 Loading playlist: {PLAYLIST_ID}")
 tracks = get_spotify_playlist_tracks(PLAYLIST_ID)
@@ -45,9 +49,24 @@ for idx, track in enumerate(tracks, 1):
     else:
         print(f"  ❌ Not found on Apple Music: {title}")
 
-    # אם לא נמצא או לא תאם
+    # אם לא נמצא או לא תאם → הורדה עם spotify-dl
     filename = sanitize_filename(f"{artist} - {title}.mp3")
-    download_url = f"https://spotidownloader.com/en?url=https://open.spotify.com/track/{spotify_id}"
+    filepath = os.path.join(DOWNLOAD_DIR, filename)
+    spotify_url = f"https://open.spotify.com/track/{spotify_id}"
+
+    print(f"  ⬇️ Downloading from Spotify: {spotify_url}")
+    try:
+        subprocess.run([
+            "spotify-dl",
+            "--output", filepath,
+            spotify_url
+        ], check=True)
+        print(f"  ✅ Downloaded to {filepath}")
+        download_url = f"https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/{DOWNLOAD_DIR}/{filename.replace(' ', '%20')}"
+    except subprocess.CalledProcessError:
+        print(f"  ❌ Download failed for: {spotify_url}")
+        download_url = spotify_url  # fallback
+
     full_playlist.append({
         "title": title,
         "artist": artist,
