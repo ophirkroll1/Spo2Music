@@ -2,3 +2,4 @@ requests
 yt-dlp
 ytmusicapi
 mutagen
+spotify-dl
