@@ -1,94 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple Music Matches</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full Playlist Results</title>
   <style>
+    /* Base page styling */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
-      background: linear-gradient(135deg, #f0f0f5, #ffffff);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: #f5f5f7; /* light gray background similar to Apple Music app */
       margin: 0;
       padding: 2rem;
-      color: #111;
+      color: #333;
     }
     h1 {
       text-align: center;
-      font-size: 2.2rem;
-      margin-bottom: 2rem;
-      color: #333;
+      font-size: 2em;
+      margin-bottom: 1.5rem;
+      color: #111;
     }
-    .song {
+
+    /* Song list container */
+    #song-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    /* Individual track card */
+    .track-card {
       display: flex;
       align-items: center;
       background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 1rem;
-      margin: 0 auto 1.2rem;
-      max-width: 600px;
-      transition: transform 0.2s ease;
-    }
-    .song:hover {
-      transform: translateY(-2px);
-    }
-    .song img {
-      width: 80px;
-      height: 80px;
       border-radius: 12px;
-      margin-right: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      transition: transform 0.2s;
+    }
+    .track-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    /* Album cover image */
+    .cover {
+      width: 60px;
+      height: 60px;
+      flex-shrink: 0;
+      border-radius: 8px;
       object-fit: cover;
+      background: #ddd;
+      margin-right: 0.75rem;
     }
-    .song-info {
-      flex-grow: 1;
+
+    /* Song info (title and artist) */
+    .track-info {
+      flex: 1;
+      min-width: 0;
     }
-    .song-title {
-      font-size: 1.2rem;
+    .track-title {
+      display: block;
+      font-size: 1em;
       font-weight: 600;
-      margin: 0;
-    }
-    .song-artist {
-      margin: 0.2rem 0 0.6rem;
-      color: #666;
-    }
-    .song a {
+      color: #000;
       text-decoration: none;
-      color: #007aff;
-      font-weight: 500;
+      margin: 0;
+      /* Allow long titles to break to next line */
+      word-break: break-word;
+    }
+    .track-title:hover {
+      text-decoration: underline;
+    }
+    .track-artist {
+      font-size: 0.9em;
+      color: #555;
+      margin: 0.2em 0 0 0;
+      /* Truncate artist name if too long for one line */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Responsive adjustments for small screens */
+    @media(max-width: 600px) {
+      body { padding: 1rem; }
+      .track-card { padding: 0.5rem; }
+      .cover {
+        width: 50px;
+        height: 50px;
+        margin-right: 0.5rem;
+      }
+      .track-title { font-size: 0.95em; }
+      .track-artist { font-size: 0.85em; }
     }
   </style>
 </head>
 <body>
-  <h1>🎵 Matched Apple Music Songs</h1>
-  <div id="results"></div>
+  <!-- Section title -->
+  <h1>🎵 Full Playlist Results</h1>
+
+  <!-- Container for the unified song list -->
+  <ul id="song-list"></ul>
 
   <script>
-    const JSON_URL = 'https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/apple_matches.json';
+    // URLs of the JSON data files in the GitHub repository
+    const appleUrl   = 'https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/apple_matches.json';
+    const missingUrl = 'https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/missing_songs.json';
 
-    fetch(JSON_URL)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById('results');
-        data.forEach(song => {
-          const div = document.createElement('div');
-          div.className = 'song';
+    const songListEl = document.getElementById('song-list');
+    const placeholderImage = 'https://via.placeholder.com/60?text=%E2%99%AA';  // default cover (music note)
 
-          div.innerHTML = `
-            <img src="${song.artworkUrl}" alt="Cover">
-            <div class="song-info">
-              <p class="song-title">${song.title}</p>
-              <p class="song-artist">${song.artist}</p>
-              <a href="${song.url}" target="_blank">Listen on Apple Music</a>
-            </div>
-          `;
+    // Fetch both JSON files in parallel
+    Promise.all([
+      fetch(appleUrl).then(res => res.json()),
+      fetch(missingUrl).then(res => res.json())
+    ])
+    .then(([appleMatches, missingSongs]) => {
+      // Merge songs preserving original playlist order
+      const mergedSongs = [];
+      let i = 0, j = 0;
+      const totalCount = appleMatches.length + missingSongs.length;
+      while (mergedSongs.length < totalCount) {
+        if (i < appleMatches.length && j < missingSongs.length) {
+          // Decide which list to pull from next based on how many from each have been taken
+          if (i <= j) {
+            // Next song in order was found on Apple Music
+            mergedSongs.push({ ...appleMatches[i], source: 'apple' });
+            i++;
+          } else {
+            // Next song in order was missing on Apple Music
+            mergedSongs.push({ ...missingSongs[j], source: 'missing' });
+            j++;
+          }
+        } else if (i < appleMatches.length) {
+          // Only Apple songs remain
+          mergedSongs.push({ ...appleMatches[i], source: 'apple' });
+          i++;
+        } else if (j < missingSongs.length) {
+          // Only missing songs remain
+          mergedSongs.push({ ...missingSongs[j], source: 'missing' });
+          j++;
+        }
+      }
 
-          container.appendChild(div);
-        });
-      })
-      .catch(err => {
-        document.getElementById('results').innerText = '❌ Failed to load songs.';
-        console.error(err);
+      // Create DOM elements for each song entry
+      mergedSongs.forEach(song => {
+        const li = document.createElement('li');
+        li.className = 'track-card';
+
+        // Cover image (use placeholder if no artwork URL available)
+        const img = document.createElement('img');
+        img.className = 'cover';
+        img.src = song.artworkUrl || placeholderImage;
+        img.alt = song.title + ' cover';
+        li.appendChild(img);
+
+        // Container for text info
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'track-info';
+
+        // Title (anchor link)
+        const titleLink = document.createElement('a');
+        titleLink.className = 'track-title';
+        titleLink.textContent = song.title;
+        if (song.source === 'apple') {
+          titleLink.href = song.url;                   // Apple Music track URL
+        } else if (song.source === 'missing') {
+          titleLink.href = song.download_url || song.downloadUrl || '#';  // Download link for missing song
+        }
+        titleLink.target = '_blank';
+        titleLink.rel = 'noopener noreferrer';
+
+        // Artist name
+        const artistP = document.createElement('p');
+        artistP.className = 'track-artist';
+        artistP.textContent = song.artist;
+
+        // Assemble the info and add to list item
+        infoDiv.appendChild(titleLink);
+        infoDiv.appendChild(artistP);
+        li.appendChild(infoDiv);
+        songListEl.appendChild(li);
       });
+    })
+    .catch(error => {
+      console.error('Error loading playlist data:', error);
+      songListEl.innerHTML = '<li style="color:red;">Failed to load playlist data.</li>';
+    });
   </script>
 </body>
 </html>
