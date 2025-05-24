@@ -1,7 +1,7 @@
 import json
 import os
-import sys
 import subprocess
+import sys
 from spotify_client import get_spotify_playlist_tracks
 from apple_music import search_apple_music, artist_similarity
 from utils import sanitize_filename
@@ -50,7 +50,7 @@ for idx, track in enumerate(tracks, 1):
     else:
         print(f"  ❌ Not found on Apple Music: {title}")
 
-    # אם לא נמצא או לא תאם → הורדה עם spotify-dl
+    # אם לא נמצא או לא תאם → הורדה עם spotDL
     filename = sanitize_filename(f"{artist} - {title}.mp3")
     filepath = os.path.join(DOWNLOAD_DIR, filename)
     spotify_url = f"https://open.spotify.com/track/{spotify_id}"
@@ -58,9 +58,9 @@ for idx, track in enumerate(tracks, 1):
     print(f"  ⬇️ Downloading from Spotify: {spotify_url}")
     try:
         subprocess.run([
-            sys.executable, "-m", "spotify_dl",
-            "--output", filepath,
-            spotify_url
+            "spotdl",
+            spotify_url,
+            "--output", filepath
         ], check=True)
         print(f"  ✅ Downloaded to {filepath}")
         download_url = f"https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/{DOWNLOAD_DIR}/{filename.replace(' ', '%20')}"
