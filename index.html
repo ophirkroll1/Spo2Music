@@ -1,131 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Full Playlist Results</title>
+  <meta charset="UTF-8">
+  <title>🎵 רשימת השמעה</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen;
-      background: #f5f5f7;
-      margin: 0;
-      padding: 2rem;
-      color: #333;
+      font-family: sans-serif;
+      direction: rtl;
+      background-color: #f9f9f9;
+      padding: 20px;
     }
-    h1 {
-      text-align: center;
-      font-size: 2em;
-      margin-bottom: 1.5rem;
-      color: #111;
-    }
-    #song-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 auto;
-      max-width: 600px;
-    }
-    .track-card {
+    .track {
       display: flex;
       align-items: center;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      transition: transform 0.2s;
-    }
-    .track-card:hover {
-      transform: translateY(-2px);
-    }
-    .cover {
-      width: 60px;
-      height: 60px;
+      margin-bottom: 15px;
+      background-color: #fff;
+      padding: 10px;
       border-radius: 8px;
-      object-fit: cover;
-      background: #ddd;
-      margin-right: 0.75rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .track img {
+      width: 100px;
+      height: 100px;
+      margin-left: 15px;
+      border-radius: 8px;
     }
     .track-info {
       flex: 1;
-      min-width: 0;
     }
-    .track-title {
-      display: block;
-      font-size: 1em;
-      font-weight: 600;
-      color: #000;
-      text-decoration: none;
+    .track-info h3 {
       margin: 0;
-      word-break: break-word;
+      font-size: 1.2em;
     }
-    .track-title:hover {
-      text-decoration: underline;
-    }
-    .track-artist {
-      font-size: 0.9em;
+    .track-info p {
+      margin: 5px 0;
       color: #555;
-      margin: 0.2em 0 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
-    @media(max-width: 600px) {
-      body { padding: 1rem; }
-      .track-card { padding: 0.5rem; }
-      .cover {
-        width: 50px;
-        height: 50px;
-        margin-right: 0.5rem;
-      }
-      .track-title { font-size: 0.95em; }
-      .track-artist { font-size: 0.85em; }
+    .track-info a {
+      display: inline-block;
+      margin-top: 5px;
+      text-decoration: none;
+      color: #0073e6;
     }
   </style>
 </head>
 <body>
-  <h1>🎵 Full Playlist Results</h1>
-  <ul id="song-list"></ul>
+  <h1>🎵 רשימת השמעה</h1>
+  <div id="playlist"></div>
 
   <script>
-    const jsonUrl = 'https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/full_playlist.json';
-    const songListEl = document.getElementById('song-list');
-
-    fetch(jsonUrl)
-      .then(res => res.json())
+    fetch('full_playlist.json')
+      .then(response => response.json())
       .then(data => {
-        data.forEach(song => {
-          const li = document.createElement('li');
-          li.className = 'track-card';
-
-          const img = document.createElement('img');
-          img.className = 'cover';
-          img.src = song.artworkUrl || 'https://via.placeholder.com/100?text=%E2%99%AA';
-          img.alt = song.title + ' cover';
-          li.appendChild(img);
-
-          const infoDiv = document.createElement('div');
-          infoDiv.className = 'track-info';
-
-          const titleLink = document.createElement('a');
-          titleLink.className = 'track-title';
-          titleLink.textContent = song.title;
-          titleLink.href = song.url;
-          titleLink.target = '_blank';
-          titleLink.rel = 'noopener noreferrer';
-
-          const artistP = document.createElement('p');
-          artistP.className = 'track-artist';
-          artistP.textContent = song.artist;
-
-          infoDiv.appendChild(titleLink);
-          infoDiv.appendChild(artistP);
-          li.appendChild(infoDiv);
-          songListEl.appendChild(li);
+        const container = document.getElementById('playlist');
+        data.forEach(track => {
+          const div = document.createElement('div');
+          div.className = 'track';
+          div.innerHTML = `
+            <img src="${track.artworkUrl}" alt="Cover">
+            <div class="track-info">
+              <h3>${track.title}</h3>
+              <p>${track.artist}</p>
+              <a href="${track.url}" target="_blank">🎧 ${track.source === 'apple' ? 'Apple Music' : 'הורדה'}</a>
+            </div>
+          `;
+          container.appendChild(div);
         });
-      })
-      .catch(error => {
-        console.error('Error loading full playlist:', error);
-        songListEl.innerHTML = '<li style="color:red;">Failed to load playlist data.</li>';
       });
   </script>
 </body>
