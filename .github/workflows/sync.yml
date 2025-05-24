@@ -25,17 +25,11 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install spotify-dl and ffmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          pip install spotify-dl
-
       - name: Install spotDL and FFmpeg
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-          pip install spotdl
+          pip install --upgrade yt-dlp spotdl
 
       - name: Run debug sync script
         run: python3 main_debug.py
