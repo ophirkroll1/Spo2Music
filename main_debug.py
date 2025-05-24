@@ -56,8 +56,10 @@ for idx, track in enumerate(tracks, 1):
 
     print(f"  ⬇️ Downloading from Spotify: {spotify_url}")
     try:
+        import sys  # הוסף בתחילת הקובץ
+        
         subprocess.run([
-            "spotify-dl",
+            sys.executable, "-m", "spotify_dl",
             "--output", filepath,
             spotify_url
         ], check=True)
