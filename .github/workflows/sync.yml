@@ -31,6 +31,12 @@ jobs:
           sudo apt-get install -y ffmpeg
           pip install spotify-dl
 
+      - name: Install spotDL and FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          pip install spotdl
+
       - name: Run debug sync script
         run: python3 main_debug.py
 
