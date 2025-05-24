@@ -65,16 +65,31 @@
   <script>
     const JSON_URL = 'https://raw.githubusercontent.com/ophirkroll1/Spo2Music/main/apple_matches.json';
 
+    async function fetchCover(title, artist) {
+      const query = encodeURIComponent(`${title} ${artist}`);
+      const url = `https://itunes.apple.com/search?term=${query}&entity=song&limit=1`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        return data.results[0]?.artworkUrl100 || 'https://via.placeholder.com/100x100?text=🎵';
+      } catch (e) {
+        return 'https://via.placeholder.com/100x100?text=🎵';
+      }
+    }
+
     fetch(JSON_URL)
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
         const container = document.getElementById('results');
-        data.forEach(song => {
+
+        for (const song of data) {
+          const cover = await fetchCover(song.title, song.artist);
+
           const div = document.createElement('div');
           div.className = 'song';
 
           div.innerHTML = `
-            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/00/aa/00/00aa0000-0000-0000-0000-000000000000/cover.jpg/100x100bb.jpg" alt="Cover">
+            <img src="${cover}" alt="Cover">
             <div class="song-info">
               <p class="song-title">${song.title}</p>
               <p class="song-artist">${song.artist}</p>
@@ -83,7 +98,7 @@
           `;
 
           container.appendChild(div);
-        });
+        }
       })
       .catch(err => {
         document.getElementById('results').innerText = '❌ Failed to load songs.';
