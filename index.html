@@ -3,44 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple Music Results</title>
+  <title>Apple Music Matches</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
-      background-color: #f9f9f9;
+      background: linear-gradient(135deg, #f0f0f5, #ffffff);
       margin: 0;
       padding: 2rem;
+      color: #111;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+      color: #333;
     }
     .song {
       display: flex;
       align-items: center;
       background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       padding: 1rem;
-      margin-bottom: 1rem;
-      transition: 0.3s;
+      margin: 0 auto 1.2rem;
+      max-width: 600px;
+      transition: transform 0.2s ease;
     }
     .song:hover {
-      transform: scale(1.01);
+      transform: translateY(-2px);
     }
     .song img {
       width: 80px;
       height: 80px;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-right: 1rem;
+      object-fit: cover;
     }
     .song-info {
       flex-grow: 1;
     }
     .song-title {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 600;
       margin: 0;
     }
     .song-artist {
-      margin: 0;
-      color: #555;
+      margin: 0.2rem 0 0.6rem;
+      color: #666;
     }
     .song a {
       text-decoration: none;
@@ -50,7 +59,7 @@
   </style>
 </head>
 <body>
-  <h1>🎵 Apple Music Results</h1>
+  <h1>🎵 Matched Apple Music Songs</h1>
   <div id="results"></div>
 
   <script>
@@ -65,7 +74,7 @@
           div.className = 'song';
 
           div.innerHTML = `
-            <img src="https://is4-ssl.mzstatic.com/image/thumb/Music116/v4/aa/cc/ee/aaccee-0000-0000-0000-000000000000/cover.jpg/100x100bb.jpg" alt="Cover">
+            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/00/aa/00/00aa0000-0000-0000-0000-000000000000/cover.jpg/100x100bb.jpg" alt="Cover">
             <div class="song-info">
               <p class="song-title">${song.title}</p>
               <p class="song-artist">${song.artist}</p>
@@ -77,7 +86,7 @@
         });
       })
       .catch(err => {
-        document.getElementById('results').innerText = 'Failed to load songs.';
+        document.getElementById('results').innerText = '❌ Failed to load songs.';
         console.error(err);
       });
   </script>
