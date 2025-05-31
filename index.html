@@ -2,161 +2,222 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>🎶 רשימת השמעה</title>
+  <title>🎶 Playlist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      background-color: #f2f2f7;
+      background: linear-gradient(120deg, #f4f7fa 0%, #e8ecf3 100%);
       margin: 0;
-      padding: 20px;
+      padding: 0;
       direction: rtl;
+      min-height: 100vh;
     }
     h1 {
       text-align: center;
-      color: #1c1c1e;
-      margin-bottom: 20px;
+      color: #262c38;
+      font-size: 1.25em;
+      font-weight: 900;
+      margin: 30px 0 20px 0;
+      letter-spacing: 1.1px;
     }
-    .playlist {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      overflow: hidden;
+    #playlist {
+      max-width: 420px;
+      margin: 0 auto 40px auto;
+      padding: 0 2vw;
     }
-    .track {
+    .track-card {
       display: flex;
       align-items: center;
-      padding: 12px 16px;
-      border-bottom: 1px solid #e0e0e0;
-      cursor: pointer;
-      transition: background-color 0.2s;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 18px #d4dae72a;
+      margin-bottom: 20px;
+      padding: 13px 15px;
+      gap: 16px;
+      transition: box-shadow 0.16s;
+      position: relative;
+      min-height: 80px;
     }
-    .track:last-child {
-      border-bottom: none;
-    }
-    .track:hover {
-      background-color: #f9f9f9;
+    .track-card:hover {
+      box-shadow: 0 6px 30px #b4b8c833;
     }
     .artwork {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      background-color: #d1d1d6;
-      flex-shrink: 0;
-      margin-left: 16px;
+      width: 56px;
+      height: 56px;
+      border-radius: 13px;
+      background: #f0f1f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
+      font-size: 2em;
+      color: #a8aab7;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px #e0e5f9;
     }
     .artwork img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-radius: 13px;
     }
     .track-info {
       flex: 1;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      gap: 3px;
+    }
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 2px;
     }
     .track-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1c1c1e;
+      font-size: 1.1em;
+      font-weight: 800;
+      color: #252b37;
       margin: 0;
-      margin-bottom: 4px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 165px;
+    }
+    .source-label {
+      font-size: 0.89em;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 2px 7px;
+      margin-right: 5px;
+      margin-left: 2px;
+      display: inline-block;
+      vertical-align: middle;
+      letter-spacing: 0.03em;
+    }
+    .source-apple {
+      background: #f4e3f8;
+      color: #bc41c7;
+    }
+    .source-tg {
+      background: #e0f5fc;
+      color: #239fd7;
     }
     .track-artist {
-      font-size: 14px;
-      color: #6e6e73;
+      color: #8891a8;
+      font-size: 0.97em;
+      font-weight: 500;
       margin: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 155px;
     }
-    .source-icon {
-      width: 20px;
-      height: 20px;
+    .track-btn {
+      border: none;
+      outline: none;
+      border-radius: 1000px;
+      padding: 9px 17px 9px 17px;
+      font: inherit;
+      font-size: 1em;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(90deg, #268cff 0%, #62e6fa 100%);
+      color: #fff;
+      transition: background 0.15s, transform 0.13s;
+      box-shadow: 0 2px 8px #c6e5f2b0;
+      display: flex;
+      align-items: center;
+      gap: 7px;
       margin-right: 8px;
+      margin-left: 0;
+    }
+    .track-btn:active { background: #1f6fc7; transform: scale(0.97);}
+    .track-btn svg {
+      width: 1.18em;
+      height: 1.18em;
+      opacity: 0.82;
+      margin-right: 2px;
+    }
+    @media (max-width: 480px) {
+      #playlist { max-width: 99vw; padding: 0 1vw;}
+      .track-card { padding: 9px 6px; }
+      .track-title, .track-artist { max-width: 100px; }
+      .artwork { width: 44px; height: 44px; font-size: 1.5em;}
+      .track-btn { font-size: 0.98em; padding: 8px 13px; }
     }
   </style>
 </head>
 <body>
-  <h1>🎶 רשימת השמעה</h1>
-  <div class="playlist" id="playlist"></div>
-
+  <h1>🎶 רשימת השמעה מלאה</h1>
+  <div id="playlist"></div>
   <script>
-    const playlistData = [
-      {
-        title: "שם השיר 1",
-        artist: "האמן 1",
-        artworkUrl: "https://via.placeholder.com/60",
-        source: "apple",
-        url: "https://music.apple.com/track1"
-      },
-      {
-        title: "שם השיר 2",
-        artist: "האמן 2",
-        artworkUrl: "https://via.placeholder.com/60",
-        source: "telegram",
-        spotifyUrl: "https://open.spotify.com/track/xyz"
+    function artworkImg(src, altTxt) {
+      if (!src || src.includes("placeholder")) {
+        return `<div class="artwork"><span>🎵</span></div>`;
+      } else {
+        return `<div class="artwork"><img src="${src}" alt="${altTxt || 'Artwork'}" /></div>`;
       }
-      // הוסף שירים נוספים כאן
-    ];
-
-    const playlistContainer = document.getElementById('playlist');
-
-    playlistData.forEach(track => {
-      const trackElement = document.createElement('div');
-      trackElement.className = 'track';
-
-      const artworkElement = document.createElement('div');
-      artworkElement.className = 'artwork';
-      const img = document.createElement('img');
-      img.src = track.artworkUrl;
-      img.alt = `${track.title} cover`;
-      artworkElement.appendChild(img);
-
-      const infoElement = document.createElement('div');
-      infoElement.className = 'track-info';
-      const titleElement = document.createElement('p');
-      titleElement.className = 'track-title';
-      titleElement.textContent = track.title;
-      const artistElement = document.createElement('p');
-      artistElement.className = 'track-artist';
-      artistElement.textContent = track.artist;
-      infoElement.appendChild(titleElement);
-      infoElement.appendChild(artistElement);
-
-      const sourceIcon = document.createElement('img');
-      sourceIcon.className = 'source-icon';
-      if (track.source === 'apple') {
-        sourceIcon.src = 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg';
-        sourceIcon.alt = 'Apple Music';
-      } else if (track.source === 'telegram') {
-        sourceIcon.src = 'https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg';
-        sourceIcon.alt = 'Telegram';
-      }
-
-      trackElement.appendChild(artworkElement);
-      trackElement.appendChild(infoElement);
-      trackElement.appendChild(sourceIcon);
-
-      trackElement.addEventListener('click', () => {
-        if (track.source === 'apple') {
-          window.open(track.url, '_blank');
-        } else if (track.source === 'telegram') {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(track.spotifyUrl).then(() => {
-              window.location.href = "https://t.me/MusicsHuntersbot";
-            }).catch(err => {
-              alert("שגיאה בהעתקה: " + err);
-            });
-          } else {
-            alert("העתקה ללוח לא נתמכת בדפדפן הזה");
+    }
+    function sourceLabel(source) {
+      if (source === 'apple') return `<span class="source-label source-apple">Apple Music</span>`;
+      if (source === 'missing') return `<span class="source-label source-tg">Telegram</span>`;
+      return '';
+    }
+    function btnIcon(source) {
+      if (source === 'apple') return `<svg fill="currentColor" viewBox="0 0 20 20"><path d="M15.39 3.27A4.12 4.12 0 0011.24 7.4c0 .22.02.44.06.64a5.09 5.09 0 00-3.62 2.08A5.04 5.04 0 005.09 16c2.18 0 2.7-1.23 4.87-1.23s2.68 1.23 4.87 1.23c2.18 0 4.09-1.9 4.09-4.24 0-2.12-1.62-3.64-3.36-3.88.01-.17.02-.33.02-.5A4.13 4.13 0 0015.39 3.27z"></path></svg>`;
+      if (source === 'missing') return `<svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.95 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm2.57 11.09l1.16-5.49c.09-.42-.18-.65-.6-.5l-7.36 2.84c-.41.16-.41.38-.07.48l1.88.59 4.36-2.73c.21-.13.4-.06.25.08l-3.53 3.19-.15 2.05c.14 0 .2-.06.27-.13l1.32-1.23 2.72 2.01c.5.36.85.17.98-.33z"></path></svg>`;
+      return '';
+    }
+    fetch('docs/full_playlist.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('playlist');
+        data.forEach(track => {
+          const card = document.createElement('div');
+          card.className = 'track-card';
+          let label = sourceLabel(track.source);
+          let btn = '';
+          if (track.source === 'apple') {
+            btn = `<button class="track-btn" onclick="window.open('${track.url}', '_blank'); event.stopPropagation();">${btnIcon('apple')} פתח באפל מיוזיק</button>`;
+          } else if (track.source === 'missing' && track.spotify_url) {
+            btn = `<button class="track-btn" onclick="copyAndOpenBot('${track.spotify_url}'); event.stopPropagation();">${btnIcon('missing')} הורד בטלגרם</button>`;
+          } else if (track.url) {
+            btn = `<button class="track-btn" onclick="window.open('${track.url}', '_blank'); event.stopPropagation();">⬇️ הורד</button>`;
           }
-        }
+          card.innerHTML = `
+            ${artworkImg(track.artworkUrl, track.title)}
+            <div class="track-info">
+              <div class="title-row">
+                <div class="track-title">${track.title}</div>
+                ${label}
+              </div>
+              <div class="track-artist">${track.artist}</div>
+            </div>
+            ${btn}
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(err => {
+        document.getElementById('playlist').innerHTML = '<p style="color:red">שגיאה בטעינת רשימת ההשמעה.</p>';
+        console.error(err);
       });
-
-      playlistContainer.appendChild(trackElement);
-    });
+    function copyAndOpenBot(spotifyUrl) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(spotifyUrl)
+          .then(() => {
+            window.location.href = "https://t.me/MusicsHuntersbot";
+          })
+          .catch(err => {
+            alert("שגיאה בהעתקה: " + err);
+          });
+      } else {
+        window.location.href = "https://t.me/MusicsHuntersbot";
+      }
+    }
   </script>
 </body>
 </html>
