@@ -2,148 +2,138 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <title>🎵 רשימת השמעה</title>
+  <title>🎶 רשימת השמעה מלאה</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       direction: rtl;
-      background: #f4f6fa;
+      background: #f8fafc;
       margin: 0;
     }
     h1 {
       text-align: center;
-      color: #21262a;
-      font-weight: 900;
-      font-size: 1.25em;
-      margin: 22px 0 12px 0;
-      letter-spacing: 0.5px;
+      color: #22282f;
+      font-size: 1.18em;
+      font-weight: 800;
+      margin: 20px 0 13px 0;
+      letter-spacing: 0.2px;
+      padding-right: 10px;
     }
     #playlist {
-      max-width: 390px;
-      margin: 0 auto 24px auto;
+      max-width: 430px;
+      margin: 0 auto 12px auto;
     }
     .track {
       display: flex;
       align-items: center;
       background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 1.5px 8px #d3d9e7;
-      margin-bottom: 13px;
-      padding: 9px 12px;
-      gap: 12px;
-      min-height: 68px;
-      transition: box-shadow 0.16s;
+      border-radius: 13px;
+      border-bottom: 0.9px solid #f1f2f6;
+      margin-bottom: 3px;
+      padding: 0 9px;
+      min-height: 53px;
+      transition: background 0.16s;
     }
-    .track:hover {
-      box-shadow: 0 3px 18px 0 #c9d4e7;
+    .track:last-child {
+      border-bottom: none;
     }
     .artwork {
-      width: 48px;
-      height: 48px;
-      border-radius: 13px;
-      background: #f0f1f4;
+      width: 37px;
+      height: 37px;
+      border-radius: 8.5px;
+      background: #f3f4f8;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      font-size: 1.8em;
-      color: #b3b6be;
+      font-size: 1.28em;
+      color: #b0b3bc;
       flex-shrink: 0;
+      margin-left: 12px;
+      margin-right: 0;
+    }
+    .artwork img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8.5px;
+      object-fit: cover;
+      display: block;
     }
     .track-info {
       flex: 1;
       min-width: 0;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 2px;
+      gap: 2.5px;
+      overflow: hidden;
     }
     .track-info h3 {
       margin: 0;
       font-size: 1em;
-      font-weight: 800;
-      color: #222e38;
-      line-height: 1.2;
-      letter-spacing: 0.2px;
+      font-weight: 700;
+      color: #1c2532;
+      line-height: 1.17;
+      letter-spacing: 0.01em;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
       width: 100%;
-      max-width: 210px;
+      max-width: 190px;
     }
     .track-info p {
       margin: 0;
-      color: #9fa7b7;
-      font-size: 0.92em;
+      color: #b5b8be;
+      font-size: 0.93em;
       font-weight: 500;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
       width: 100%;
-      max-width: 210px;
+      max-width: 135px;
     }
     .track-info .actions {
-      margin-top: 6px;
+      margin-top: 0.5px;
       display: flex;
-      gap: 7px;
+      gap: 2.5px;
     }
     .action-btn, .track-info a, .track-info button {
       font: inherit;
-      font-weight: 700;
-      font-size: 0.93em;
+      font-size: 0.94em;
       border: none;
-      outline: none;
       border-radius: 1000px;
       cursor: pointer;
-      padding: 5px 13px 5px 13px;
-      margin: 0;
-      background: #f6f8fc;
-      color: #255dff;
-      box-shadow: none;
-      transition: background 0.13s, color 0.13s;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      padding: 0 9px;
+      background: none;
+      color: #287aff;
+      font-weight: 600;
       text-decoration: none;
       min-width: 0;
       min-height: 0;
+      height: 23px;
+      line-height: 23px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      transition: color 0.16s;
+      box-shadow: none;
     }
     .action-btn:active, .track-info a:active, .track-info button:active {
-      background: #e2e6f3;
-      color: #0051b6;
+      color: #1b4fa8;
+      background: #e7f0ff;
     }
-    .apple-btn {
-      color: #0058e6;
-      background: #f6f8fc;
-    }
-    .apple-btn:active {
-      background: #e9eef7;
-      color: #1935ae;
-    }
-    .tg-btn {
-      color: #159e8e;
-      background: #f5fefb;
-    }
-    .tg-btn:active {
-      background: #daf3ee;
-      color: #077b6d;
-    }
-    .dl-btn {
-      color: #195f39;
-      background: #f6fff6;
-    }
-    .dl-btn:active {
-      background: #e3f5e5;
-      color: #187b39;
+    .action-btn svg {
+      width: 1.12em;
+      height: 1.12em;
+      margin-left: 3px;
+      margin-right: 0;
+      opacity: 0.82;
     }
     @media (max-width: 480px) {
-      #playlist {
-        max-width: 99vw;
-      }
-      .track-info h3, .track-info p {
-        max-width: 120px;
-      }
+      #playlist { max-width: 99vw; }
+      .track-info h3, .track-info p { max-width: 100px; }
+      .track { padding: 0 5vw; }
+      .artwork { margin-left: 8px; }
     }
   </style>
 </head>
@@ -156,7 +146,7 @@
       if (!src || src.includes("placeholder")) {
         return `<div class="artwork"><span>🎵</span></div>`;
       } else {
-        return `<div class="artwork"><img src="${src}" alt="${altTxt || 'Artwork'}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:13px;"/></div>`;
+        return `<div class="artwork"><img src="${src}" alt="${altTxt || 'Artwork'}" /></div>`;
       }
     }
 
@@ -170,11 +160,19 @@
 
           let actions = '';
           if (track.source === 'apple') {
-            actions = `<a href="${track.url}" target="_blank" class="action-btn apple-btn">האזן באפל מיוזיק 🎧</a>`;
+            actions = `<a href="${track.url}" target="_blank" class="action-btn" title="האזן באפל מיוזיק">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M15.39 3.27A4.12 4.12 0 0011.24 7.4c0 .22.02.44.06.64a5.09 5.09 0 00-3.62 2.08A5.04 5.04 0 005.09 16c2.18 0 2.7-1.23 4.87-1.23s2.68 1.23 4.87 1.23c2.18 0 4.09-1.9 4.09-4.24 0-2.12-1.62-3.64-3.36-3.88.01-.17.02-.33.02-.5A4.13 4.13 0 0015.39 3.27z"></path></svg>
+              האזן באפל מיוזיק</a>`;
           } else if (track.source === 'missing' && track.spotify_url) {
-            actions = `<button onclick="copyAndOpenBot('${track.spotify_url}')" class="action-btn tg-btn">הורדה (טלגרם) 📩</button>`;
+            actions = `<button onclick="copyAndOpenBot('${track.spotify_url}')" class="action-btn" title="הורדה בטלגרם">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.95 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm2.57 11.09l1.16-5.49c.09-.42-.18-.65-.6-.5l-7.36 2.84c-.41.16-.41.38-.07.48l1.88.59 4.36-2.73c.21-.13.4-.06.25.08l-3.53 3.19-.15 2.05c.14 0 .2-.06.27-.13l1.32-1.23 2.72 2.01c.5.36.85.17.98-.33z"></path></svg>
+              הורדה (טלגרם)
+            </button>`;
           } else if (track.url) {
-            actions = `<a href="${track.url}" target="_blank" class="action-btn dl-btn">הורד ⬇️</a>`;
+            actions = `<a href="${track.url}" target="_blank" class="action-btn" title="הורד">
+              <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 00-1 1v8H5.414a1 1 0 00-.707 1.707l4.586 4.586a1 1 0 001.414 0l4.586-4.586A1 1 0 0014.586 11H11V3a1 1 0 00-1-1z"></path></svg>
+              הורד
+            </a>`;
           }
 
           div.innerHTML = `
