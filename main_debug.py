@@ -49,7 +49,7 @@ for idx, track in enumerate(tracks, 1):
     else:
         print(f"  ❌ Not found on Apple Music: {title}")
 
-    # אם לא נמצא או לא תאם → הורדה עם spotDL
+    # אם לא נמצא באפל מיוזיק — הוסף שדה spotify_url להורדה מהבוט טלגרם
     filename = sanitize_filename(f"{artist} - {title}.mp3")
     filepath = os.path.join(DOWNLOAD_DIR, filename)
     spotify_url = f"https://open.spotify.com/track/{spotify_id}"
@@ -68,13 +68,15 @@ for idx, track in enumerate(tracks, 1):
     except subprocess.CalledProcessError as e:
         print(f"  ❌ Download failed for: {spotify_url}")
         print(f"  ❗ Error: {e}")
-        download_url = spotify_url  # fallback
+        download_url = ""  # הורדה נכשלה, לא ליצור קישור להורדה
 
+    # תמיד מוסיף גם את spotify_url
     full_playlist.append({
         "title": title,
         "artist": artist,
         "source": "missing",
         "url": download_url,
+        "spotify_url": spotify_url,
         "artworkUrl": "https://via.placeholder.com/100?text=%E2%99%AA"
     })
 
