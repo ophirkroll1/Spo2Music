@@ -8,149 +8,155 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       direction: rtl;
-      background: linear-gradient(135deg, #f5f6fa 0%, #e8ebf3 100%);
+      background: #f4f6fa;
       margin: 0;
-      min-height: 100vh;
     }
     h1 {
       text-align: center;
-      color: #222f3e;
+      color: #21262a;
       font-weight: 900;
-      font-size: 1.7em;
-      margin: 35px 0 20px 0;
-      letter-spacing: 1px;
+      font-size: 1.25em;
+      margin: 22px 0 12px 0;
+      letter-spacing: 0.5px;
     }
     #playlist {
-      max-width: 420px;
-      margin: 0 auto 40px auto;
+      max-width: 390px;
+      margin: 0 auto 24px auto;
     }
     .track {
       display: flex;
-      flex-direction: column;
-      align-items: stretch;
+      align-items: center;
       background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 6px 26px 0 rgba(34,51,102,0.09), 0 1.5px 8px rgba(120,140,170,0.07);
-      margin-bottom: 26px;
-      padding: 18px 18px 14px 18px;
-      position: relative;
-      transition: box-shadow 0.14s;
+      border-radius: 18px;
+      box-shadow: 0 1.5px 8px #d3d9e7;
+      margin-bottom: 13px;
+      padding: 9px 12px;
+      gap: 12px;
+      min-height: 68px;
+      transition: box-shadow 0.16s;
     }
     .track:hover {
-      box-shadow: 0 12px 36px 0 rgba(34,51,102,0.18), 0 2px 10px rgba(120,140,170,0.10);
+      box-shadow: 0 3px 18px 0 #c9d4e7;
     }
     .artwork {
-      width: 98px;
-      height: 98px;
-      border-radius: 18px;
-      background: #e7eaf1;
-      margin: 0 auto 12px auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      background: #f0f1f4;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      box-shadow: 0 1.5px 10px #e2e6fa;
-      font-size: 2.4em;
-      color: #a0a4b8;
+      font-size: 1.8em;
+      color: #b3b6be;
+      flex-shrink: 0;
     }
     .track-info {
-      text-align: center;
-      margin-bottom: 8px;
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
     }
     .track-info h3 {
-      margin: 0 0 5px 0;
-      font-size: 1.16em;
+      margin: 0;
+      font-size: 1em;
       font-weight: 800;
-      color: #222f3e;
-      line-height: 1.15;
+      color: #222e38;
+      line-height: 1.2;
       letter-spacing: 0.2px;
-      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100%;
+      max-width: 210px;
     }
     .track-info p {
-      margin: 0 0 3px 0;
-      color: #7a869a;
-      font-size: 1em;
+      margin: 0;
+      color: #9fa7b7;
+      font-size: 0.92em;
       font-weight: 500;
-      letter-spacing: 0.1px;
-      overflow: hidden;
       text-overflow: ellipsis;
+      overflow: hidden;
       white-space: nowrap;
+      width: 100%;
+      max-width: 210px;
     }
     .track-info .actions {
-      margin-top: 13px;
+      margin-top: 6px;
       display: flex;
-      justify-content: center;
-      gap: 10px;
+      gap: 7px;
     }
     .action-btn, .track-info a, .track-info button {
       font: inherit;
       font-weight: 700;
-      font-size: 1em;
+      font-size: 0.93em;
       border: none;
       outline: none;
-      border-radius: 14px;
+      border-radius: 1000px;
       cursor: pointer;
-      padding: 8px 20px;
-      margin: 0 auto;
-      box-shadow: 0 2px 12px #e0e9ff2f;
-      transition: background 0.18s, color 0.11s;
+      padding: 5px 13px 5px 13px;
+      margin: 0;
+      background: #f6f8fc;
+      color: #255dff;
+      box-shadow: none;
+      transition: background 0.13s, color 0.13s;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      justify-content: center;
-      min-width: 120px;
+      gap: 5px;
       text-decoration: none;
+      min-width: 0;
+      min-height: 0;
+    }
+    .action-btn:active, .track-info a:active, .track-info button:active {
+      background: #e2e6f3;
+      color: #0051b6;
     }
     .apple-btn {
-      background: linear-gradient(90deg, #55c2ff 5%, #7679ff 100%);
-      color: #fff;
+      color: #0058e6;
+      background: #f6f8fc;
     }
-    .apple-btn:hover {
-      background: linear-gradient(90deg, #4872ff 5%, #1bb4ff 100%);
+    .apple-btn:active {
+      background: #e9eef7;
+      color: #1935ae;
     }
     .tg-btn {
-      background: linear-gradient(90deg, #32c0ef 0%, #6e8af6 100%);
-      color: #fff;
+      color: #159e8e;
+      background: #f5fefb;
     }
-    .tg-btn:hover {
-      background: linear-gradient(90deg, #4291ff 0%, #27cfff 100%);
+    .tg-btn:active {
+      background: #daf3ee;
+      color: #077b6d;
     }
     .dl-btn {
-      background: linear-gradient(90deg, #26e7a6 0%, #19c37d 100%);
-      color: #fff;
+      color: #195f39;
+      background: #f6fff6;
     }
-    .dl-btn:hover {
-      background: linear-gradient(90deg, #19c37d 0%, #26e7a6 100%);
+    .dl-btn:active {
+      background: #e3f5e5;
+      color: #187b39;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 480px) {
       #playlist {
-        max-width: 97vw;
+        max-width: 99vw;
       }
-      .track {
-        padding: 12px 5vw 10px 5vw;
-      }
-      .artwork {
-        width: 85vw;
-        max-width: 96px;
-        height: 85vw;
-        max-height: 96px;
+      .track-info h3, .track-info p {
+        max-width: 120px;
       }
     }
   </style>
 </head>
 <body>
-  <h1>🎶 רשימת השמעה מלאה</h1>
+  <h1>רשימת השמעה מלאה 🎶</h1>
   <div id="playlist"></div>
 
   <script>
     function artworkImg(src, altTxt) {
-      if (src && src.includes("placeholder")) {
-        // Fallback לאייקון אם אין עטיפה אמיתית
-        return `<div class="artwork"><span>🎵</span></div>`;
-      } else if (!src) {
+      if (!src || src.includes("placeholder")) {
         return `<div class="artwork"><span>🎵</span></div>`;
       } else {
-        return `<div class="artwork"><img src="${src}" alt="${altTxt || 'Artwork'}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:18px;"/></div>`;
+        return `<div class="artwork"><img src="${src}" alt="${altTxt || 'Artwork'}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:13px;"/></div>`;
       }
     }
 
@@ -164,11 +170,11 @@
 
           let actions = '';
           if (track.source === 'apple') {
-            actions = `<a href="${track.url}" target="_blank" class="action-btn apple-btn">🎧 האזן באפל מיוזיק</a>`;
+            actions = `<a href="${track.url}" target="_blank" class="action-btn apple-btn">האזן באפל מיוזיק 🎧</a>`;
           } else if (track.source === 'missing' && track.spotify_url) {
-            actions = `<button onclick="copyAndOpenBot('${track.spotify_url}')" class="action-btn tg-btn">📩 הורדה (טלגרם)</button>`;
+            actions = `<button onclick="copyAndOpenBot('${track.spotify_url}')" class="action-btn tg-btn">הורדה (טלגרם) 📩</button>`;
           } else if (track.url) {
-            actions = `<a href="${track.url}" target="_blank" class="action-btn dl-btn">⬇️ הורד</a>`;
+            actions = `<a href="${track.url}" target="_blank" class="action-btn dl-btn">הורד ⬇️</a>`;
           }
 
           div.innerHTML = `
