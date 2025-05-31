@@ -36,11 +36,16 @@
       margin: 5px 0;
       color: #555;
     }
-    .track-info a {
+    .track-info a, .track-info button {
       display: inline-block;
       margin-top: 5px;
       text-decoration: none;
       color: #0073e6;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
     }
   </style>
 </head>
@@ -49,6 +54,7 @@
   <div id="playlist"></div>
 
   <script>
+    // בטעינה נמשוך את הפלייליסט
     fetch('full_playlist.json')
       .then(response => response.json())
       .then(data => {
@@ -56,12 +62,21 @@
         data.forEach(track => {
           const div = document.createElement('div');
           div.className = 'track';
+          let actionElement = "";
+          if (track.source === 'apple') {
+            actionElement = `<a href="${track.url}" target="_blank">🎧 האזן באפל מיוזיק</a>`;
+          } else if (track.source === 'missing' && track.spotify_url) {
+            actionElement = `<button onclick="copyAndOpenBot('${track.spotify_url}')">📥 הורדה (טלגרם)</button>`;
+          } else if (track.url) {
+            // הורדה רגילה (fallback)
+            actionElement = `<a href="${track.url}" target="_blank">הורד</a>`;
+          }
           div.innerHTML = `
             <img src="${track.artworkUrl}" alt="Cover">
             <div class="track-info">
               <h3>${track.title}</h3>
               <p>${track.artist}</p>
-              <a href="${track.url}" target="_blank">🎧 ${track.source === 'apple' ? 'האזן באפל מיוזיק' : 'הורדה'}</a>
+              ${actionElement}
             </div>
           `;
           container.appendChild(div);
@@ -71,6 +86,22 @@
         document.getElementById('playlist').innerHTML = '<p style="color:red">שגיאה בטעינת רשימת ההשמעה.</p>';
         console.error(err);
       });
+
+    // פונקציה להעתקה ללוח ופתיחת הבוט
+    function copyAndOpenBot(spotifyUrl) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(spotifyUrl)
+          .then(() => {
+            // אחרי שהועתק, פתח את הטלגרם בוט
+            window.location.href = "https://t.me/MusicsHuntersbot";
+          })
+          .catch(err => {
+            alert("שגיאה בהעתקה: " + err);
+          });
+      } else {
+        alert("העתקה ללוח לא נתמכת בדפדפן הזה");
+      }
+    }
   </script>
 </body>
 </html>
