@@ -7,146 +7,105 @@
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(120deg, #f4f7fa 0%, #e8ecf3 100%);
-      margin: 0;
-      padding: 0;
       direction: rtl;
-      min-height: 100vh;
+      background: #f6f7fa;
+      margin: 0;
     }
     h1 {
       text-align: center;
-      color: #262c38;
-      font-size: 1.25em;
-      font-weight: 900;
-      margin: 30px 0 20px 0;
-      letter-spacing: 1.1px;
+      color: #23272f;
+      font-size: 1.15em;
+      font-weight: 800;
+      margin: 25px 0 13px 0;
+      letter-spacing: 0.2px;
     }
     #playlist {
-      max-width: 420px;
-      margin: 0 auto 40px auto;
+      max-width: 450px;
+      margin: 0 auto 14px auto;
       padding: 0 2vw;
     }
-    .track-card {
+    .song-row {
       display: flex;
       align-items: center;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 2px 18px #d4dae72a;
-      margin-bottom: 20px;
-      padding: 13px 15px;
-      gap: 16px;
-      transition: box-shadow 0.16s;
+      padding: 9px 0 9px 0;
+      border-bottom: 1px solid #e8e9ee;
+      cursor: pointer;
+      transition: background 0.11s;
+      min-height: 54px;
       position: relative;
-      min-height: 80px;
+      background: #fff;
     }
-    .track-card:hover {
-      box-shadow: 0 6px 30px #b4b8c833;
-    }
+    .song-row:last-child { border-bottom: none; }
     .artwork {
-      width: 56px;
-      height: 56px;
-      border-radius: 13px;
-      background: #f0f1f6;
+      width: 42px;
+      height: 42px;
+      border-radius: 7px;
+      background: #f2f3f6;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      font-size: 2em;
-      color: #a8aab7;
+      font-size: 1.36em;
+      color: #b3b7c1;
       flex-shrink: 0;
-      box-shadow: 0 2px 8px #e0e5f9;
+      margin-left: 13px;
     }
     .artwork img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 13px;
+      border-radius: 7px;
     }
-    .track-info {
+    .song-details {
       flex: 1;
       min-width: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 3px;
-    }
-    .title-row {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-bottom: 2px;
-    }
-    .track-title {
-      font-size: 1.1em;
-      font-weight: 800;
-      color: #252b37;
-      margin: 0;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      gap: 2px;
       overflow: hidden;
-      max-width: 165px;
     }
-    .source-label {
-      font-size: 0.89em;
-      font-weight: 600;
-      border-radius: 8px;
-      padding: 2px 7px;
-      margin-right: 5px;
-      margin-left: 2px;
-      display: inline-block;
-      vertical-align: middle;
-      letter-spacing: 0.03em;
+    .song-title {
+      font-size: 1em;
+      font-weight: 700;
+      color: #1a1f26;
+      margin: 0 0 1.5px 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 99vw;
     }
-    .source-apple {
-      background: #f4e3f8;
-      color: #bc41c7;
-    }
-    .source-tg {
-      background: #e0f5fc;
-      color: #239fd7;
-    }
-    .track-artist {
-      color: #8891a8;
-      font-size: 0.97em;
+    .song-artist {
+      color: #9699a2;
+      font-size: 0.95em;
       font-weight: 500;
       margin: 0;
       text-overflow: ellipsis;
-      white-space: nowrap;
       overflow: hidden;
-      max-width: 155px;
+      white-space: nowrap;
+      max-width: 99vw;
     }
-    .track-btn {
-      border: none;
-      outline: none;
-      border-radius: 1000px;
-      padding: 9px 17px 9px 17px;
-      font: inherit;
-      font-size: 1em;
-      font-weight: 700;
-      cursor: pointer;
-      background: linear-gradient(90deg, #268cff 0%, #62e6fa 100%);
-      color: #fff;
-      transition: background 0.15s, transform 0.13s;
-      box-shadow: 0 2px 8px #c6e5f2b0;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-right: 8px;
-      margin-left: 0;
+    .source-badge {
+      font-size: 0.84em;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 2.5px 8px 2.5px 8px;
+      background: #eceef4;
+      color: #487cf5;
+      display: inline-block;
+      margin-right: 9px;
+      margin-top: 2.5px;
+      vertical-align: middle;
+      letter-spacing: 0.05em;
     }
-    .track-btn:active { background: #1f6fc7; transform: scale(0.97);}
-    .track-btn svg {
-      width: 1.18em;
-      height: 1.18em;
-      opacity: 0.82;
-      margin-right: 2px;
+    .source-apple { color: #d32962; background: #f9e7f1; }
+    .source-tg { color: #219bdc; background: #e4f6fc; }
+    .song-row:active {
+      background: #f1f8fe;
     }
-    @media (max-width: 480px) {
+    @media (max-width: 600px) {
       #playlist { max-width: 99vw; padding: 0 1vw;}
-      .track-card { padding: 9px 6px; }
-      .track-title, .track-artist { max-width: 100px; }
-      .artwork { width: 44px; height: 44px; font-size: 1.5em;}
-      .track-btn { font-size: 0.98em; padding: 8px 13px; }
+      .song-title, .song-artist { max-width: 70vw; }
+      .artwork { width: 35px; height: 35px; font-size: 1.1em; }
     }
   </style>
 </head>
@@ -161,14 +120,9 @@
         return `<div class="artwork"><img src="${src}" alt="${altTxt || 'Artwork'}" /></div>`;
       }
     }
-    function sourceLabel(source) {
-      if (source === 'apple') return `<span class="source-label source-apple">Apple Music</span>`;
-      if (source === 'missing') return `<span class="source-label source-tg">Telegram</span>`;
-      return '';
-    }
-    function btnIcon(source) {
-      if (source === 'apple') return `<svg fill="currentColor" viewBox="0 0 20 20"><path d="M15.39 3.27A4.12 4.12 0 0011.24 7.4c0 .22.02.44.06.64a5.09 5.09 0 00-3.62 2.08A5.04 5.04 0 005.09 16c2.18 0 2.7-1.23 4.87-1.23s2.68 1.23 4.87 1.23c2.18 0 4.09-1.9 4.09-4.24 0-2.12-1.62-3.64-3.36-3.88.01-.17.02-.33.02-.5A4.13 4.13 0 0015.39 3.27z"></path></svg>`;
-      if (source === 'missing') return `<svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.95 2c4.41 0 8 3.59 8 8s-3.59 8-8 8-8-3.59-8-8 3.59-8 8-8zm2.57 11.09l1.16-5.49c.09-.42-.18-.65-.6-.5l-7.36 2.84c-.41.16-.41.38-.07.48l1.88.59 4.36-2.73c.21-.13.4-.06.25.08l-3.53 3.19-.15 2.05c.14 0 .2-.06.27-.13l1.32-1.23 2.72 2.01c.5.36.85.17.98-.33z"></path></svg>`;
+    function sourceBadge(source) {
+      if (source === 'apple') return `<span class="source-badge source-apple">Apple Music</span>`;
+      if (source === 'missing') return `<span class="source-badge source-tg">Telegram</span>`;
       return '';
     }
     fetch('docs/full_playlist.json')
@@ -176,48 +130,42 @@
       .then(data => {
         const container = document.getElementById('playlist');
         data.forEach(track => {
-          const card = document.createElement('div');
-          card.className = 'track-card';
-          let label = sourceLabel(track.source);
-          let btn = '';
-          if (track.source === 'apple') {
-            btn = `<button class="track-btn" onclick="window.open('${track.url}', '_blank'); event.stopPropagation();">${btnIcon('apple')} פתח באפל מיוזיק</button>`;
-          } else if (track.source === 'missing' && track.spotify_url) {
-            btn = `<button class="track-btn" onclick="copyAndOpenBot('${track.spotify_url}'); event.stopPropagation();">${btnIcon('missing')} הורד בטלגרם</button>`;
-          } else if (track.url) {
-            btn = `<button class="track-btn" onclick="window.open('${track.url}', '_blank'); event.stopPropagation();">⬇️ הורד</button>`;
-          }
-          card.innerHTML = `
+          const row = document.createElement('div');
+          row.className = 'song-row';
+          row.innerHTML = `
             ${artworkImg(track.artworkUrl, track.title)}
-            <div class="track-info">
-              <div class="title-row">
-                <div class="track-title">${track.title}</div>
-                ${label}
-              </div>
-              <div class="track-artist">${track.artist}</div>
+            <div class="song-details">
+              <div class="song-title">${track.title} ${sourceBadge(track.source)}</div>
+              <div class="song-artist">${track.artist}</div>
             </div>
-            ${btn}
           `;
-          container.appendChild(card);
+          // פעולה לפי מקור
+          if (track.source === 'apple') {
+            row.onclick = () => window.open(track.url, "_blank");
+          } else if (track.source === 'missing' && track.spotify_url) {
+            row.onclick = () => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText(track.spotify_url)
+                  .then(() => {
+                    window.location.href = "https://t.me/MusicsHuntersbot";
+                  })
+                  .catch(() => {
+                    alert("שגיאה בהעתקה");
+                  });
+              } else {
+                window.location.href = "https://t.me/MusicsHuntersbot";
+              }
+            };
+          } else if (track.url) {
+            row.onclick = () => window.open(track.url, "_blank");
+          }
+          container.appendChild(row);
         });
       })
       .catch(err => {
         document.getElementById('playlist').innerHTML = '<p style="color:red">שגיאה בטעינת רשימת ההשמעה.</p>';
         console.error(err);
       });
-    function copyAndOpenBot(spotifyUrl) {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(spotifyUrl)
-          .then(() => {
-            window.location.href = "https://t.me/MusicsHuntersbot";
-          })
-          .catch(err => {
-            alert("שגיאה בהעתקה: " + err);
-          });
-      } else {
-        window.location.href = "https://t.me/MusicsHuntersbot";
-      }
-    }
   </script>
 </body>
 </html>
