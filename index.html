@@ -3,49 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <title>🎵 רשימת השמעה</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       direction: rtl;
-      background-color: #f9f9f9;
-      padding: 20px;
+      background: linear-gradient(135deg, #f0f4ff 0%, #f9f9f9 100%);
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      color: #223366;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin: 30px 0 20px 0;
+    }
+    #playlist {
+      max-width: 600px;
+      margin: 0 auto 40px auto;
     }
     .track {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       background-color: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 14px 16px;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px 0 rgba(34,51,102,0.06), 0 1.5px 8px rgba(120,140,170,0.09);
+      transition: transform 0.08s;
+      gap: 18px;
+    }
+    .track:hover {
+      transform: translateY(-2px) scale(1.018);
+      box-shadow: 0 6px 32px 0 rgba(34,51,102,0.13), 0 1.5px 8px rgba(120,140,170,0.11);
     }
     .track img {
-      width: 100px;
-      height: 100px;
-      margin-left: 15px;
-      border-radius: 8px;
+      width: 68px;
+      height: 68px;
+      margin-left: 0;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 1.5px 6px #e2e6fa;
     }
     .track-info {
       flex: 1;
+      min-width: 0;
     }
     .track-info h3 {
-      margin: 0;
-      font-size: 1.2em;
+      margin: 0 0 3px 0;
+      font-size: 1.13em;
+      color: #18234c;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
     .track-info p {
-      margin: 5px 0;
-      color: #555;
+      margin: 3px 0 6px 0;
+      color: #67748d;
+      font-size: 0.97em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
     .track-info a, .track-info button {
       display: inline-block;
-      margin-top: 5px;
+      margin-top: 3px;
       text-decoration: none;
-      color: #0073e6;
-      background: none;
+      color: #fff;
+      background: linear-gradient(90deg, #5f7afe 20%, #36cfff 100%);
       border: none;
       cursor: pointer;
       font: inherit;
-      padding: 0;
+      padding: 7px 16px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 1em;
+      transition: background 0.19s;
+      box-shadow: 0 1px 4px #dae1ff38;
+    }
+    .track-info a:hover, .track-info button:hover {
+      background: linear-gradient(90deg, #4970ff 20%, #25bbff 100%);
+    }
+    .track-info button:active, .track-info a:active {
+      background: #36cfff;
+      opacity: 0.88;
+    }
+    @media (max-width: 700px) {
+      #playlist {
+        max-width: 95vw;
+      }
+      .track {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .track img {
+        width: 100%;
+        height: 180px;
+        margin: 0 0 10px 0;
+        border-radius: 12px;
+      }
+      .track-info h3, .track-info p {
+        white-space: normal;
+        text-overflow: initial;
+      }
     }
   </style>
 </head>
@@ -54,7 +117,6 @@
   <div id="playlist"></div>
 
   <script>
-    // בטעינה נמשוך את הפלייליסט
     fetch('docs/full_playlist.json')
       .then(response => response.json())
       .then(data => {
@@ -68,7 +130,6 @@
           } else if (track.source === 'missing' && track.spotify_url) {
             actionElement = `<button onclick="copyAndOpenBot('${track.spotify_url}')">📥 הורדה (טלגרם)</button>`;
           } else if (track.url) {
-            // הורדה רגילה (fallback)
             actionElement = `<a href="${track.url}" target="_blank">הורד</a>`;
           }
           div.innerHTML = `
@@ -87,12 +148,10 @@
         console.error(err);
       });
 
-    // פונקציה להעתקה ללוח ופתיחת הבוט
     function copyAndOpenBot(spotifyUrl) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(spotifyUrl)
           .then(() => {
-            // אחרי שהועתק, פתח את הטלגרם בוט
             window.location.href = "https://t.me/MusicsHuntersbot";
           })
           .catch(err => {
