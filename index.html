@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-      direction: rtl;
+      direction: ltr;
       background: #f6f7fa;
       margin: 0;
     }
@@ -18,6 +18,7 @@
       font-weight: 800;
       margin: 25px 0 13px 0;
       letter-spacing: 0.2px;
+      direction: rtl;
     }
     #playlist {
       max-width: 450px;
@@ -26,6 +27,7 @@
     }
     .song-row {
       display: flex;
+      flex-direction: row;
       align-items: center;
       padding: 9px 0 9px 0;
       border-bottom: 1px solid #e8e9ee;
@@ -34,6 +36,7 @@
       min-height: 54px;
       position: relative;
       background: #fff;
+      direction: ltr;
     }
     .song-row:last-child { border-bottom: none; }
     .artwork {
@@ -48,7 +51,9 @@
       font-size: 1.36em;
       color: #b3b7c1;
       flex-shrink: 0;
-      margin-left: 13px;
+      margin-right: 13px;
+      margin-left: 0;
+      order: 2;
     }
     .artwork img {
       width: 100%;
@@ -63,16 +68,33 @@
       flex-direction: column;
       gap: 2px;
       overflow: hidden;
+      align-items: flex-start;
+      order: 1;
     }
     .song-title {
       font-size: 1em;
       font-weight: 700;
       color: #1a1f26;
       margin: 0 0 1.5px 0;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
       max-width: 99vw;
+      position: relative;
+      overflow: hidden;
+      height: 1.4em;
+      display: flex;
+      align-items: center;
+    }
+    .marquee {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 7s linear infinite;
+      min-width: 100%;
+      padding-left: 10px;
+    }
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      5%   { transform: translateX(0); }
+      90%  { transform: translateX(calc(-100% + 170px)); }
+      100% { transform: translateX(calc(-100% + 170px)); }
     }
     .song-artist {
       color: #9699a2;
@@ -92,7 +114,7 @@
       background: #eceef4;
       color: #487cf5;
       display: inline-block;
-      margin-right: 9px;
+      margin-left: 9px;
       margin-top: 2.5px;
       vertical-align: middle;
       letter-spacing: 0.05em;
@@ -125,6 +147,12 @@
       if (source === 'missing') return `<span class="source-badge source-tg">Telegram</span>`;
       return '';
     }
+    function createMarquee(title) {
+      // אם השם ארוך – תן אנימציה
+      return title.length > 18
+        ? `<span class="marquee">${title}</span>`
+        : title;
+    }
     fetch('docs/full_playlist.json')
       .then(response => response.json())
       .then(data => {
@@ -133,11 +161,11 @@
           const row = document.createElement('div');
           row.className = 'song-row';
           row.innerHTML = `
-            ${artworkImg(track.artworkUrl, track.title)}
             <div class="song-details">
-              <div class="song-title">${track.title} ${sourceBadge(track.source)}</div>
+              <div class="song-title">${createMarquee(track.title)} ${sourceBadge(track.source)}</div>
               <div class="song-artist">${track.artist}</div>
             </div>
+            ${artworkImg(track.artworkUrl, track.title)}
           `;
           // פעולה לפי מקור
           if (track.source === 'apple') {
